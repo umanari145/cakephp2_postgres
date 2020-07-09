@@ -5,10 +5,11 @@ RUN apt-get update -yqq \
     git \
     zip \
     unzip \
+    libpq-dev \
   && rm -rf /var/lib/apt/lists
  
 # Enable PHP extensions
-RUN docker-php-ext-install pdo_mysql mysqli
+RUN docker-php-ext-install pdo_mysql mysqli  pdo pdo_pgsql
  
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
