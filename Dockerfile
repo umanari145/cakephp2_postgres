@@ -1,5 +1,5 @@
 FROM php:5.6-apache
- 
+
 RUN apt-get update -yqq \
   && apt-get install -yqq --no-install-recommends \
     git \
@@ -37,5 +37,9 @@ RUN mkdir -p \
 # Enable Apache modules and restart
 RUN a2enmod rewrite \
   && service apache2 restart
- 
+
+WORKDIR /var/www/html
+
+CMD ./wait-for-it.sh postgres:5432 --timeout=30 --strict -- ./start.sh
+
 EXPOSE 80

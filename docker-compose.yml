@@ -1,38 +1,29 @@
 version: '3'
 services:
-  php:
-    container_name: "php"
-    build:
-        context: "./docker/php"
-        dockerfile: "Dockerfile"
-    ports:
-        - "8080:80"
-    volumes:
-        - .:/var/www/html
-    networks:
-     - cakepgsql
 
   postgres:
     container_name: "postgres"
-    build:
-      context: ./docker/pgsql
-      dockerfile: Dockerfile
+    image: postgres:9.3
     ports:
-     - "5432:5432"
+      - "5432:5432"
+    volumes:
+      # 永続化することでコンテナ削除してもOK
+      - "pgvolume2:/var/lib/postgresql/data"     
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
+  php:
+    container_name: "php"
+    build:
+      context: "./"
+      dockerfile: "Dockerfile"
+    ports:
+      - "8080:80"
     volumes:
-        # 永続化することでコンテナ削除してもOK
-        - "pgvolume2:/var/lib/postgresql/data"
-        # dbスクリプト
-        - "./docker/pgsql/init:/docker-entrypoint-initdb.d"
-    networks:
-     - cakepgsql
-     
-networks:
-  cakepgsql:
-    driver: "bridge"
-        
+      - .:/var/www/html 
+    depends_on:
+      - "postgres"
+
 volumes: 
   pgvolume2:

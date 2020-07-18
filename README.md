@@ -3,9 +3,9 @@
 cakephp2.10 + postgres
 
 
-# migrationsについて
+## migrationsについて
 
-## CakeDC
+### CakeDC
 - 履歴はDB管理
 - git submodule(特定のディレクトりを別のgitの範囲にする)
 - かなり複雑で面倒っぽい
@@ -15,7 +15,7 @@ cakephp2.10 + postgres
 https://www.ryuzee.com/contents/blog/6108
 
 
-## Dbup 
+### Dbup 
 - 超簡単
 - 履歴をテキスト管理
 - upコマンドのみ
@@ -24,7 +24,7 @@ https://www.ryuzee.com/contents/blog/6108
 参考<br>
 https://brtriver.github.io/dbup/ja/
 
-## phinx
+### phinx
 - 直SQL可能
 - 履歴はDB管理
 - ロールバックあり
@@ -34,4 +34,11 @@ https://brtriver.github.io/dbup/ja/
 参考<br>
 https://phinx.org/
 https://qiita.com/hypermkt/items/b915b8a9fbda2f0c612e
+
+## Docker起動時にpostgresの起動をまつ
+
+Dockerfileに下記のように記述(postgresの起動を待ってからシェルを実行)
+```
+CMD ./wait-for-it.sh postgres:5432 --timeout=30 --strict -- ./start.sh
+```
 
