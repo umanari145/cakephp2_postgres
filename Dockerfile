@@ -9,7 +9,7 @@ RUN apt-get update -yqq \
   && rm -rf /var/lib/apt/lists
  
 # Enable PHP extensions
-RUN docker-php-ext-install pdo_mysql mysqli  pdo pdo_pgsql
+RUN docker-php-ext-install pdo pdo_pgsql
  
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
@@ -22,9 +22,31 @@ ENV PATH="${PATH}:/var/www/html/app/Vendor/bin"
 COPY site.conf /etc/apache2/sites-available/000-default.conf
  
  
-# Set default working directory
-WORKDIR ./app
- 
+# Enable Apache modules and restart
+RUN a2enmod rewrite \
+  && service apache2 restart
+
+WORKDIR /var/www/html
+
+RUN mkdir ./app
+RUN mkdir ./lib
+RUN mkdir ./db
+
+COPY app/ /var/www/html/app/
+COPY lib/ /var/www/html/lib/
+COPY db/ /var/www/html/db/
+
+COPY index.php /var/www/html/
+COPY phinx.yml /var/www/html/
+COPY composer.json /var/www/html/
+COPY composer.lock /var/www/html/
+COPY wait-for-it.sh /var/www/html/
+COPY start.sh /var/www/html/
+
+RUN composer install
+
+WORKDIR /var/www/html/app
+
 # Create tmp directory and make it writable by the web server
 RUN mkdir -p \
     tmp/cache/models \
@@ -33,10 +55,6 @@ RUN mkdir -p \
     tmp \
   && chmod -R 770 \
     tmp
- 
-# Enable Apache modules and restart
-RUN a2enmod rewrite \
-  && service apache2 restart
 
 WORKDIR /var/www/html
 
