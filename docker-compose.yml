@@ -17,5 +17,12 @@ services:
       dockerfile: "Dockerfile"
     ports:
       - "8080:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_NAME=postgres
+      - DB_PASSWORD=postgres
     depends_on:
       - "postgres"

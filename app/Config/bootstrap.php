@@ -110,4 +110,4 @@ CakeLog::config('error', array(
 	'file' => 'error',
 ));
 
-CakePlugin::load(array('Migrations'));
+//CakePlugin::load(array('Migrations'));

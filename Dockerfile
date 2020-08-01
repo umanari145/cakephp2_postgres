@@ -58,6 +58,4 @@ RUN mkdir -p \
 
 WORKDIR /var/www/html
 
-CMD ./wait-for-it.sh postgres:5432 --timeout=30 --strict -- ./start.sh
-
 EXPOSE 80
