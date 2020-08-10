@@ -20,9 +20,9 @@ services:
     volumes:
       - .:/var/www/html
     environment:
-      - DB_HOST=postgres
-      - DB_USER=postgres
-      - DB_NAME=postgres
-      - DB_PASSWORD=postgres
+      - DB_HOST
+      - DB_USER
+      - DB_NAME
+      - DB_PASSWORD
     depends_on:
       - "postgres"

@@ -16,10 +16,10 @@ environments:
 
     development:
         adapter: pgsql
-        host: postgres
-        name: postgres
-        user: postgres
-        pass: postgres
+        host: __DB_HOST__
+        name: __DB_NAME__
+        user: __DB_USER__
+        pass: __DB_PASSWORD__
         port: 5432
         charset: utf8
 
