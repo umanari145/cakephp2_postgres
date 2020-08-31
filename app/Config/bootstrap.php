@@ -99,15 +99,16 @@ Configure::write('Dispatcher.filters', array(
  * Configures default file logging options
  */
 App::uses('CakeLog', 'Log');
+App::uses('ConsoleOutput', 'Console');
 CakeLog::config('debug', array(
-	'engine' => 'File',
+	'engine' => 'ConsoleLog',
 	'types' => array('notice', 'info', 'debug'),
-	'file' => 'debug',
+	'stream' => new ConsoleOutput(),
 ));
 CakeLog::config('error', array(
-	'engine' => 'File',
+	'engine' => 'ConsoleLog',
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
-	'file' => 'error',
+	'stream' => new ConsoleOutput(),
 ));
 
 //CakePlugin::load(array('Migrations'));
