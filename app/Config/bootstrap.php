@@ -108,7 +108,7 @@ CakeLog::config('debug', array(
 CakeLog::config('error', array(
 	'engine' => 'ConsoleLog',
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
-	'stream' => new ConsoleOutput(),
+	'stream' => new ConsoleOutput('php://stderr'),
 ));
 
 //CakePlugin::load(array('Migrations'));

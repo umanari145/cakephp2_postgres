@@ -38,7 +38,7 @@ class PersonsController extends AppController {
 		$person = $this->Person->find('all');
 		//$this->log($this->Person->getDataSource()->getLog());
 		$this->log("--hogehoge--", 'info');
-		$this->log("--hogehoge2--", 'info');
+		$this->log("--hogehoge2--");
 		$this->set( 'person', $person);
 	}
 }
