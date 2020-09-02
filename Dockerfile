@@ -1,30 +1,24 @@
-FROM php:5.6-apache
+FROM amazonlinux:2
 
-RUN apt-get update -yqq \
-  && apt-get install -yqq --no-install-recommends \
-    git \
-    zip \
-    unzip \
-    libpq-dev \
-  && rm -rf /var/lib/apt/lists
+# インストール済みのパッケージを最新版にアップデート
+RUN yum -y update && \
+    # 追加で必要なパッケージをインストール
+    yum -y install \
+        sudo \
+        shadow-utils \
+        procps \
+        wget \
+        openssh-server \
+        openssh-clients \
+        which \
+        iproute \
+        vim \
+        e2fsprogs && \
+    # キャッシュを削除
+    yum clean all
  
-# Enable PHP extensions
-RUN docker-php-ext-install pdo pdo_pgsql
- 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
- 
-# Add cake and composer command to system path
-ENV PATH="${PATH}:/var/www/html/lib/Cake/Console"
-ENV PATH="${PATH}:/var/www/html/app/Vendor/bin"
- 
-# COPY apache site.conf file
-COPY site.conf /etc/apache2/sites-available/000-default.conf
- 
- 
-# Enable Apache modules and restart
-RUN a2enmod rewrite \
-  && service apache2 restart
+# install nginx
+RUN amazon-linux-extras install nginx1.12 php7.3 -y
 
 WORKDIR /var/www/html
 
@@ -42,8 +36,10 @@ COPY composer.json /var/www/html/
 COPY composer.lock /var/www/html/
 COPY wait-for-it.sh /var/www/html/
 COPY start.sh /var/www/html/
-
-RUN composer install
+COPY default.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY www.conf /etc/php-fpm.d/www.conf
+COPY php.ini /etc/php.ini
 
 WORKDIR /var/www/html/app
 
@@ -51,8 +47,6 @@ WORKDIR /var/www/html/app
 RUN mkdir -p \
     tmp/cache/models \
     tmp/cache/persistent \
-  && chown -R :www-data \
-    tmp \
   && chmod -R 770 \
     tmp
 

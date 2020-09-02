@@ -14,7 +14,9 @@ services:
     container_name: "php"
     build:
       context: "./"
-      dockerfile: "Dockerfile_php"
+      dockerfile: "Dockerfile"
+    ports:
+      - "8080:80"
     volumes:
       - .:/var/www/html
     environment:
@@ -24,14 +26,3 @@ services:
       - DB_PASSWORD
     depends_on:
       - "postgres"
-      - "nginx"
-
-  nginx:
-    container_name: "nginx"
-    build:
-      context: "./"
-      dockerfile: "Dockerfile_nginx"
-    ports:
-      - "8080:80"
-    volumes:
-      - .:/var/www/html

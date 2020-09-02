@@ -1,0 +1,15 @@
+FROM amazonlinux:2
+
+RUN yum -y update
+
+# install php7.3
+RUN amazon-linux-extras install php7.3 -y
+
+# use php-fpm default tcp
+EXPOSE 9000
+
+# run php-fpm in the foreground
+ENTRYPOINT /usr/sbin/php-fpm -F
+
+COPY www.conf /etc/php-fpm.d/www.conf
+COPY php.ini /usr/local/etc/php/php.ini
