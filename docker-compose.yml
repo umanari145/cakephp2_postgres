@@ -9,12 +9,28 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    networks:
+      - cakenginx
+
+  nginx:
+    container_name: "nginx"
+    build:
+      context: "./"
+      dockerfile: "Dockerfile_nginx"
+    ports:
+      - "8080:80"
+    depends_on:
+      - php
+    networks:
+      - cakenginx
 
   php:
-    container_name: "php"
+    container_name: "php_fpm"
     build:
       context: "./"
       dockerfile: "Dockerfile_php"
+    ports:
+      - 9000:9000      
     volumes:
       - .:/var/www/html
     environment:
@@ -24,14 +40,9 @@ services:
       - DB_PASSWORD
     depends_on:
       - "postgres"
-      - "nginx"
+    networks:
+      - cakenginx
 
-  nginx:
-    container_name: "nginx"
-    build:
-      context: "./"
-      dockerfile: "Dockerfile_nginx"
-    ports:
-      - "8080:80"
-    volumes:
-      - .:/var/www/html
+networks:
+  cakenginx:
+    driver: bridge

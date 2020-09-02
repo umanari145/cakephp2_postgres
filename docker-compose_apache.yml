@@ -11,10 +11,10 @@ services:
       - POSTGRES_PASSWORD=postgres
 
   php:
-    container_name: "php"
+    container_name: "php_apache"
     build:
       context: "./"
-      dockerfile: "Dockerfile"
+      dockerfile: "Dockerfile_apache"
     ports:
       - "8080:80"
     volumes:
